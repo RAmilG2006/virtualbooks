@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- CSRF -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+<body class="bg-gray-100">
+<!-- Incluir menú lateral -->
+<div th:replace="fragments/sidebar :: sidebar"></div>
+<div class="container mx-auto mt-12">
+    <h1 class="text-3xl font-bold text-center mb-8">Mis Autores</h1>
+
+    <!-- Botón agregar -->
+    <div class="flex justify-end mb-4">
+        <button onclick="abrirModalAgregar()"
+                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+            Agregar Autor
+        </button>
+    </div>
+
+    <!-- Tabla autores -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow rounded-lg">
+            <thead class="bg-green-500 text-white">
+            <tr>
+                <th class="py-2 px-4">ID</th>
+                <th class="py-2 px-4">Nombre</th>
+                <th class="py-2 px-4">Nacionalidad</th>
+                <th class="py-2 px-4">Fecha de Nacimiento</th>
+                <th class="py-2 px-4">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="autor : ${autores}" class="border-b">
+                <td class="py-2 px-4" th:text="${autor.id}"></td>
+                <td class="py-2 px-4" th:text="${autor.nombre}"></td>
+                <td class="py-2 px-4" th:text="${autor.nacionalidad}"></td>
+                <td class="py-2 px-4" th:text="${autor.fechaNacido}"></td>
+                <td class="py-2 px-4 space-x-2">
+                    <button th:onclick="'abrirModalEditar(' + ${autor.id} + ')'"
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
+                        Editar
+                    </button>
+                    <form th:action="@{'/user/autores/eliminar/' + ${autor.id}}" method="post" class="inline">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+                        <button type="submit"
+                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
+                            Eliminar
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+
+    // Modal agregar
+    function abrirModalAgregar() {
+        Swal.fire({
+            title: 'Agregar Autor',
+            html: `
+                <input id="nombre" class="swal2-input" placeholder="Nombre">
+                <input id="nacionalidad" class="swal2-input" placeholder="Nacionalidad">
+                <input id="fechaNacido" type="date" class="swal2-input" placeholder="Fecha de nacimiento">
+            `,
+            confirmButtonText: 'Guardar',
+            focusConfirm: false,
+            preConfirm: () => {
+                const nombre = Swal.getPopup().querySelector('#nombre').value
+                const nacionalidad = Swal.getPopup().querySelector('#nacionalidad').value
+                const fechaNacido = Swal.getPopup().querySelector('#fechaNacido').value
+                if (!nombre || !nacionalidad || !fechaNacido) Swal.showValidationMessage("Complete todos los campos")
+                return { nombre, nacionalidad, fechaNacido }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/user/autores/agregar';
+
+                const csrf = document.createElement('input');
+                csrf.type = 'hidden';
+                csrf.name = '_csrf';
+                csrf.value = csrfToken;
+                form.appendChild(csrf);
+
+                for (const key in result.value) {
+                    const input = document.createElement('input');
+                    input.name = key;
+                    input.value = result.value[key];
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+
+    // Modal editar
+    function abrirModalEditar(id) {
+        fetch(`/user/autores/editar/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                Swal.fire({
+                    title: 'Editar Autor',
+                    html: `
+                        <input id="nombre" class="swal2-input" placeholder="Nombre" value="${data.nombre}">
+                        <input id="nacionalidad" class="swal2-input" placeholder="Nacionalidad" value="${data.nacionalidad}">
+                        <input id="fechaNacido" type="date" class="swal2-input" placeholder="Fecha de nacimiento" value="${data.fechaNacido}">
+                    `,
+                    confirmButtonText: 'Actualizar',
+                    focusConfirm: false,
+                    preConfirm: () => {
+                        const nombre = Swal.getPopup().querySelector('#nombre').value
+                        const nacionalidad = Swal.getPopup().querySelector('#nacionalidad').value
+                        const fechaNacido = Swal.getPopup().querySelector('#fechaNacido').value
+                        if (!nombre || !nacionalidad || !fechaNacido) Swal.showValidationMessage("Complete todos los campos")
+                        return { nombre, nacionalidad, fechaNacido }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = `/user/autores/editar/${id}`;
+
+                        const csrf = document.createElement('input');
+                        csrf.type = 'hidden';
+                        csrf.name = '_csrf';
+                        csrf.value = csrfToken;
+                        form.appendChild(csrf);
+
+                        for (const key in result.value) {
+                            const input = document.createElement('input');
+                            input.name = key;
+                            input.value = result.value[key];
+                            form.appendChild(input);
+                        }
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    }
+                });
+            })
+            .catch(err => {
+                Swal.fire('Error', 'No se pudo obtener los datos del autor', 'error');
+                console.error(err);
+            });
+    }
+</script>
+
+</body>
+</html>

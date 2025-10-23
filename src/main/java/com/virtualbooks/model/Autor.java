@@ -1,10 +1,8 @@
 package com.virtualbooks.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import java.time.LocalDate;
+import jakarta.validation.constraints.NotBlank;
 
-@Data
 @Entity
 @Table(name = "autores")
 public class Autor {
@@ -13,17 +11,31 @@ public class Autor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Usuario user;
-
-    @Column(length = 30, nullable = false)
+    @NotBlank(message = "El nombre es obligatorio")
     private String nombre;
 
-    @Column(length = 100, nullable = false)
     private String nacionalidad;
 
-    private LocalDate fechaNacido;
+    // Guardamos la fecha como String
+    private String fechaNacido;
 
-    private String foto;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Usuario usuario;
+
+    // ---------------- Getters y Setters ----------------
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public String getNacionalidad() { return nacionalidad; }
+    public void setNacionalidad(String nacionalidad) { this.nacionalidad = nacionalidad; }
+
+    public String getFechaNacido() { return fechaNacido; }
+    public void setFechaNacido(String fechaNacido) { this.fechaNacido = fechaNacido; }
+
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 }
