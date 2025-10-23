@@ -1,0 +1,68 @@
+<!-- templates/fragments/sidebar.html -->
+<nav th:fragment="sidebar" class="hidden lg:flex fixed top-0 left-0 bottom-0 w-64 bg-gradient-to-b from-gray-100 to-gray-300 text-gray-700 shadow-lg px-5">
+    <div class="sidebar flex flex-col flex-grow items-center py-6">
+
+        <!-- Título -->
+        <div class="text-center text-2xl font-bold text-gray-900 tracking-wide font-sans">
+            Virtual Book
+        </div>
+
+        <!-- Logo -->
+        <div class="mt-4 w-40">
+            <img th:src="@{/img/VirtualBooks.png}" alt="logo.png">
+        </div>
+
+        <!-- Menú -->
+        <ul class="flex flex-col w-full mt-8">
+            <li>
+                <a th:href="@{/user/dashboard}" class="flex items-center px-6 py-3 rounded-xl hover:bg-red-200 hover:shadow-md">
+                    <img class="h-6 w-6 mr-3" th:src="@{/svg/door.svg}" alt="Inicio" />
+                    <span class="font-medium">Inicio</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/user/misLibros}" class="flex items-center px-6 py-3 rounded-xl hover:bg-red-200 hover:shadow-md">
+                    <img class="h-6 w-6 mr-3" th:src="@{/svg/bookmark.svg}" alt="Mis Libros" />
+                    <span class="font-medium">Mis Libros</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/user/agregar}" class="flex items-center px-6 py-3 rounded-xl hover:bg-red-200 hover:shadow-md">
+                    <img class="h-6 w-6 mr-3" th:src="@{/svg/square-plus.svg}" alt="Agregar" />
+                    <span class="font-medium">Agregar</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/user/favoritos}" class="flex items-center px-6 py-3 rounded-xl hover:bg-red-200 hover:shadow-md">
+                    <img class="h-6 w-6 mr-3" th:src="@{/svg/gift.svg}" alt="Favoritos" />
+                    <span class="font-medium">Favoritos</span>
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/user/autores}"
+                   class="flex items-center px-6 py-3 rounded-xl hover:bg-red-200 hover:shadow-md">
+                    <img class="h-6 w-6 mr-3" th:src="@{/svg/id.svg}" alt="Autores" />
+                    <span class="font-medium">Autores</span>
+                </a>
+            </li>
+
+            <li>
+                <a th:href="@{/user/categorias}" class="flex items-center px-6 py-3 rounded-xl hover:bg-red-200 hover:shadow-md">
+                    <img class="h-6 w-6 mr-3" th:src="@{/svg/category-2.svg}" alt="Categorías" />
+                    <span class="font-medium">Categorías</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Botón de Salir -->
+        <div class="mt-auto w-full">
+            <form th:action="@{/logout}" method="post" class="w-full">
+                <button type="submit"
+                        class="w-full flex items-center p-3 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-all">
+                    <span class="font-medium">Salir</span>
+                </button>
+            </form>
+        </div>
+
+    </div>
+</nav>
