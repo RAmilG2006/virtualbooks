@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio de Sesión - Virtual Book</title>
+  <!-- Favicon -->
+  <link rel="shortcut icon" th:href="@{/img/book.png}" type="image/x-icon">
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="w-full h-screen">
+<div class="w-full h-screen p-2 flex flex-col bg-white lg:flex-row">
+  <!-- Contenedor de la imagen con fondo rojo -->
+  <div class="hidden lg:block bg-red-500 w-2/5 rounded-xl p-11 order-2 relative">
+    <div class="lg:bg-black opacity-20 w-full h-full rounded-xl absolute inset-0"></div>
+    <!-- Contenedor de la imagen -->
+    <div class="w-full h-full relative">
+      <img th:src="@{/img/books.jpg}" alt="Libros" class="w-full h-full object-cover rounded-xl" />
+    </div>
+  </div>
+
+  <!-- Contenedor del formulario -->
+  <div class="flex flex-col w-full h-full lg:w-3/5 lg:order-1">
+    <div class="flex flex-col items-center w-full h-full lg:justify-center">
+      <img th:src="@{/img/VirtualBooks.png}" alt="Virtual Books Logo" class="w-48 h-auto" />
+      <h1 class="text-red-500 font-bold text-2xl mb-10 mt-10">
+        Iniciar Sesión
+      </h1>
+      <p class="mb-10 text-gray-700 text-left">
+        Hola, Bienvenido de nuevo!!
+      </p>
+
+      <!-- Formulario de login -->
+      <form th:action="@{/login}" method="POST" class="w-4/5 lg:flex flex-col items-center">
+        <!-- Campo Email -->
+        <input class="block w-full p-2 border border-gray-300 rounded-md outline-1 outline-red-500 mb-4 lg:w-2/5 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+               type="email" placeholder="Email" id="mail" name="username" required />
+
+        <!-- Contenedor para el campo de contraseña y el icono -->
+        <div class="relative w-full lg:w-2/5 mb-4">
+          <input class="block w-full p-2 border border-gray-300 rounded-md outline-1 outline-red-500 pr-10 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                 type="password" placeholder="Contraseña" id="password" name="password" required />
+          <!-- Icono de "Ver Contraseña" -->
+          <button type="button" class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePassword()">
+            <svg id="see_password_img" class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </button>
+        </div>
+
+        <button type="submit"
+                class="w-full p-2 rounded-md bg-red-500 text-white font-bold lg:w-2/5 hover:bg-red-600 duration-200 transition-colors">
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <br />
+
+      <!-- Manejo de errores en la información del formulario -->
+      <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 w-full lg:w-2/5">
+        <p class="font-semibold">Error de autenticación</p>
+        <p>Usuario o contraseña incorrectos.</p>
+      </div>
+
+      <div th:if="${param.logout}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 w-full lg:w-2/5">
+        <p>Has cerrado sesión correctamente.</p>
+      </div>
+
+      <p class="my-8">
+        ¿No posees una cuenta?
+        <a th:href="@{/auth/register}" class="text-red-500 font-bold hover:text-red-700 transition-colors"> Registrarse </a>
+      </p>
+    </div>
+    <p class="flex grow items-end text-gray-600 text-center lg:block p-4">
+      © 2025 VirtualBooks Todos los derechos reservados
+    </p>
+  </div>
+</div>
+
+</body>
+</html>

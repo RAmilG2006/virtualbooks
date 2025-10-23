@@ -2,6 +2,10 @@ package com.virtualbooks.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -31,4 +35,10 @@ public class Libro {
     private String descripcion;
 
     private String imagen;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;  // Fecha de creación automática
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;  // Fecha de actualización automática
 }
